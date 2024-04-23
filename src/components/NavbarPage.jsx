@@ -2,10 +2,14 @@
 import { useState } from 'react'
 import { Navbar, NavbarBrand, NavbarContent, NavbarItem, NavbarMenuToggle, NavbarMenu, NavbarMenuItem, Link, Button } from "@nextui-org/react";
 import Image from 'next/image';
+import { useSession, signIn, signOut } from "next-auth/react"
 
 const NavbarPage = () => {
 
     const [isMenuOpen, setIsMenuOpen] = useState(false);
+
+    const { data: session } = useSession()
+    console.log('session', session);
 
     const menuItems = [
         "Profile",
@@ -55,11 +59,28 @@ const NavbarPage = () => {
                     <NavbarItem className="hidden lg:flex">
                         <Link href="#">Login</Link>
                     </NavbarItem>
-                    <NavbarItem>
-                        <Button as={Link} color="primary" href="#" variant="flat">
-                            Sign Up
-                        </Button>
-                    </NavbarItem>
+
+                    
+                    {session?.user ?
+                        <NavbarItem>
+                            <Button
+                             
+                                onClick={() => signOut()}
+                            >
+                                Logout
+                            </Button>
+                            <p>{session.user.name}</p>
+                        </NavbarItem>
+                        :
+                        <NavbarItem>
+                            <Button
+                                
+                                onClick={() => signIn()}
+                            >
+                                SignIn
+                            </Button>
+                        </NavbarItem>
+                    }
                 </NavbarContent>
                 <NavbarMenu>
                     {menuItems.map((item, index) => (
