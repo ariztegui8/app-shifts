@@ -8,8 +8,9 @@ const NavbarPage = () => {
 
     const [isMenuOpen, setIsMenuOpen] = useState(false);
 
-    const { data: session } = useSession()
-    console.log('session', session);
+    const { data: session, status } = useSession()
+    console.log({session, status});
+
 
     const menuItems = [
         "Profile",
@@ -69,7 +70,7 @@ const NavbarPage = () => {
                             >
                                 Logout
                             </Button>
-                            <p>{session.user.name}</p>
+                            <p>{session.user?.name || session.user?.user?.name}</p>
                         </NavbarItem>
                         :
                         <NavbarItem>

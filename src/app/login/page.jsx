@@ -5,44 +5,25 @@ import { useState } from "react"
 
 const Login = () => {
 
-    // const [form, setForm] = useState({
-    //     username: '',
-    //     password: ''
-    // })
-    // const [error, setError] = useState(false)
+    const [form, setForm] = useState({
+        email: '',
+        password: ''
+    })
 
-    // const { username, password } = form
+    const { email, password } = form
 
-    // const handleFormChange = e => {
-    //     setForm({
-    //         ...form,
-    //         [e.target.name]: e.target.value
-    //     })
-    // }
+    const handleFormChange = e => {
+        setForm({
+            ...form,
+            [e.target.name]: e.target.value
+        })
+    }
 
-    // const handleFormSubmit = async (e) => {
-    //     e.preventDefault()
-    //     console.log(form);
-    //     if (username.trim() == '' || password.trim() == '') {
-    //         setError(true)
-    //         return
-    //     }
-    //     setError(false)
-
-    //     try {
-    //         const response = await axios.post(
-    //             "https://www.mockachino.com/06c67c77-18c4-45/login",
-    //             {
-    //                 username,
-    //                 password
-    //             }
-    //         );
-    //         const { access_token } = response.data
-    //         setToken(access_token)
-    //     } catch (error) {
-    //         console.error("Error de autenticación:", error)
-    //     }
-    // }
+    const handleFormSubmit = async (e) => {
+        e.preventDefault()
+        console.log(form);
+       
+    }
 
     return (
         <div className="flex justify-center items-center h-screen">
@@ -51,15 +32,21 @@ const Login = () => {
                     <h1 className="text-center mb-7 font-semibold text-2xl">Login</h1>
                 </div>
 
-                <form >
+                <form onSubmit={handleFormSubmit}>
                     <div className="flex flex-col gap-3">
-                        <Input
-                            type="text"
-                            label="Nombre"
-                        />
                         <Input
                             type="email"
                             label="Email"
+                            name="email"
+                            value={email}
+                            onChange={handleFormChange}
+                        />
+                        <Input
+                            type="password"
+                            label="Password"
+                            name="password"
+                            value={password}
+                            onChange={handleFormChange}
                         />
                         <Button
                             color="primary"
