@@ -40,8 +40,8 @@ const Register = () => {
     }
 
     return (
-        <div className="flex justify-center items-center h-screen">
-            <div className="max-w-sm border p-10 rounded-lg">
+        <div className="flex justify-center items-center h-screen px-4">
+            <div className="w-[500px] border p-8 rounded-lg">
                 <div>
                     <h1 className="text-center mb-7 font-semibold text-2xl">Register</h1>
                 </div>
@@ -54,6 +54,7 @@ const Register = () => {
                             name="name"
                             value={name}
                             onChange={handleFormChange}
+                            radius="sm"
                         />
                         <Input
                             type="text"
@@ -61,6 +62,7 @@ const Register = () => {
                             name="apellido"
                             value={apellido}
                             onChange={handleFormChange}
+                            radius="sm"
                         />
                         <Input
                             type="text"
@@ -68,6 +70,7 @@ const Register = () => {
                             name="pais"
                             value={pais}
                             onChange={handleFormChange}
+                            radius="sm"
                         />
                         <Input
                             type="email"
@@ -75,6 +78,7 @@ const Register = () => {
                             name="email"
                             value={email}
                             onChange={handleFormChange}
+                            radius="sm"
                         />
                         <Input
                             type="password"
@@ -82,10 +86,12 @@ const Register = () => {
                             name="password"
                             value={password}
                             onChange={handleFormChange}
+                            radius="sm"
                         />
                         <Button
                             color="primary"
                             type="submit"
+                            radius="sm"
                         >
                             Registrar
                         </Button>

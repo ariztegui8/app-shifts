@@ -11,30 +11,31 @@ const handler = NextAuth({
         password: { label: "Password", type: "password" }
       },
       async authorize(credentials, req) {
-       
-          const res = await fetch(
-            `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/auth/login`,
-            {
-              method: "POST",
-              body: JSON.stringify({
-                email: credentials?.email,
-                password: credentials?.password,
-              }),
-              headers: {
-                "Content-Type": "application/json",
-              },
-            }
-          );
 
-          const user = await res.json();
-          console.log('user',user);
-          
-          if(user.error) throw user
+        const res = await fetch(
+          `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/auth/login`,
+          {
+            method: "POST",
+            body: JSON.stringify({
+              email: credentials?.email,
+              password: credentials?.password,
+            }),
+            headers: {
+              "Content-Type": "application/json",
+            },
+          }
+        );
 
-          return user;
-        
+        const user = await res.json();
+        console.log('user', user);
+
+        if (user.error) throw user
+
+        return user;
+
       }
     }),
+
     GoogleProvider({
       clientId: process.env.GOOGLE_CLIENT_ID,
       clientSecret: process.env.GOOGLE_CLIENT_SECRET,
@@ -50,6 +51,11 @@ const handler = NextAuth({
       return session;
     }
   },
+
+  pages: {
+    signIn: '/login',
+  }
+
 });
 
 export { handler as GET, handler as POST }

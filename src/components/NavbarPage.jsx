@@ -1,6 +1,6 @@
 'use client'
 import { useState } from 'react'
-import { Navbar, NavbarBrand, NavbarContent, NavbarItem, NavbarMenuToggle, NavbarMenu, NavbarMenuItem, Link, Button } from "@nextui-org/react";
+import { Navbar, NavbarBrand, NavbarContent, NavbarItem, NavbarMenuToggle, NavbarMenu, NavbarMenuItem, Link, Button,} from "@nextui-org/react";
 import Image from 'next/image';
 import { useSession, signIn, signOut } from "next-auth/react"
 
@@ -9,7 +9,7 @@ const NavbarPage = () => {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
 
     const { data: session, status } = useSession()
-    console.log({session, status});
+    console.log({ session, status });
 
 
     const menuItems = [
@@ -34,70 +34,50 @@ const NavbarPage = () => {
                         className="sm:hidden"
                     />
                     <NavbarBrand >
-                       
-                        <p className="font-bold text-inherit">ACME</p>
+
+                        <p className="font-bold text-inherit">TURNOS</p>
                     </NavbarBrand>
                 </NavbarContent>
 
                 <NavbarContent className="hidden sm:flex gap-4" justify="center">
                     <NavbarItem>
-                        <Link color="foreground" href="#">
-                            Features
-                        </Link>
-                    </NavbarItem>
-                    <NavbarItem isActive>
-                        <Link href="#" aria-current="page">
-                            Customers
-                        </Link>
+                        <Link color="foreground" href="#">Menu1</Link>
                     </NavbarItem>
                     <NavbarItem>
-                        <Link color="foreground" href="#">
-                            Integrations
-                        </Link>
+                        <Link href="/login" color="foreground" >Login</Link>
+                    </NavbarItem>
+                    <NavbarItem >
+                        <Link href="register" color="foreground" >Register</Link>
                     </NavbarItem>
                 </NavbarContent>
                 <NavbarContent justify="end">
-                    <NavbarItem className="hidden lg:flex">
-                        <Link href="#">Login</Link>
-                    </NavbarItem>
-
-                    
                     {session?.user ?
-                        <NavbarItem>
-                            <Button
-                             
-                                onClick={() => signOut()}
-                            >
-                                Logout
-                            </Button>
-                            <p>{session.user?.name || session.user?.user?.name}</p>
-                        </NavbarItem>
+                        <>
+                            <NavbarItem>
+                                User
+                                <p>{session.user?.name || session.user?.user?.name}</p>
+                            </NavbarItem>
+                            <NavbarItem>
+                                <Link onClick={() => signOut()} href="#">Logout</Link>
+                            </NavbarItem>
+                        </>
+
                         :
                         <NavbarItem>
-                            <Button
-                                
-                                onClick={() => signIn()}
-                            >
-                                SignIn
-                            </Button>
+                            <Link onClick={() => signIn()} href="#">Sign In</Link>
                         </NavbarItem>
                     }
                 </NavbarContent>
                 <NavbarMenu>
-                    {menuItems.map((item, index) => (
-                        <NavbarMenuItem key={`${item}-${index}`}>
-                            <Link
-                                color={
-                                    index === 2 ? "primary" : index === menuItems.length - 1 ? "danger" : "foreground"
-                                }
-                                className="w-full"
-                                href="#"
-                                size="lg"
-                            >
-                                {item}
-                            </Link>
-                        </NavbarMenuItem>
-                    ))}
+                    <NavbarMenuItem >
+                        <Link href="#" color="foreground" >Menu1</Link>
+                    </NavbarMenuItem>
+                    <NavbarMenuItem >
+                        <Link href="/login" color="foreground" >Login</Link>
+                    </NavbarMenuItem>
+                    <NavbarMenuItem >
+                        <Link href="register" color="foreground" >Register</Link>
+                    </NavbarMenuItem>
                 </NavbarMenu>
             </Navbar>
         </div>
