@@ -12,6 +12,7 @@ const LoginProfessional = () => {
         email: '',
         password: ''
     })
+    const [userType, setUserType] = useState('professional');
     const [error, setError] = useState('')
 
     const router = useRouter()
@@ -31,6 +32,7 @@ const LoginProfessional = () => {
         const res = await signIn('credentials', {
             email,
             password,
+            userType,
             redirect: false,
         })
         console.log('res', res);

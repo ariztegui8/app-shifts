@@ -30,7 +30,7 @@ const NavbarPage = () => {
 
                 <NavbarContent className="hidden sm:flex gap-4" justify="center">
                     <NavbarItem>
-                        <Link color="foreground" href="#">Menu 1</Link>
+                        <Link color="foreground" href="/shifts">Shifts</Link>
                     </NavbarItem>
                     <NavbarItem>
                         <Link href="#" color="foreground" >Menu 2</Link>
@@ -110,7 +110,7 @@ const NavbarPage = () => {
                 </NavbarContent>
                 <NavbarMenu>
                     <NavbarMenuItem >
-                        <Link href="#" color="foreground" >Menu 1</Link>
+                        <Link color="foreground" href="/shifts">Shifts</Link>
                     </NavbarMenuItem>
                     <NavbarMenuItem >
                         <Link href="#" color="foreground" >Menu 2</Link>
