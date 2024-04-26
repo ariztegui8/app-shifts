@@ -1,6 +1,6 @@
 'use client'
 import { useState } from 'react'
-import { Navbar, NavbarBrand, NavbarContent, NavbarItem, NavbarMenuToggle, NavbarMenu, NavbarMenuItem, Link, Button,} from "@nextui-org/react";
+import { Navbar, NavbarBrand, NavbarContent, NavbarItem, NavbarMenuToggle, NavbarMenu, NavbarMenuItem, Link, Button, Dropdown, DropdownTrigger, DropdownMenu, DropdownItem, } from "@nextui-org/react";
 import Image from 'next/image';
 import { useSession, signIn, signOut } from "next-auth/react"
 
@@ -12,19 +12,6 @@ const NavbarPage = () => {
     console.log({ session, status });
 
 
-    const menuItems = [
-        "Profile",
-        "Dashboard",
-        "Activity",
-        "Analytics",
-        "System",
-        "Deployments",
-        "My Settings",
-        "Team Settings",
-        "Help & Feedback",
-        "Log Out",
-    ];
-
     return (
         <div className=''>
             <Navbar className='bg-gray-50' onMenuOpenChange={setIsMenuOpen}>
@@ -35,26 +22,27 @@ const NavbarPage = () => {
                     />
                     <NavbarBrand >
 
-                        <p className="font-bold text-inherit">TURNOS</p>
+                        <Link href='/'>
+                            <p className="font-bold text-inherit">TURNOS</p>
+                        </Link>
                     </NavbarBrand>
                 </NavbarContent>
 
                 <NavbarContent className="hidden sm:flex gap-4" justify="center">
                     <NavbarItem>
-                        <Link color="foreground" href="#">Menu1</Link>
+                        <Link color="foreground" href="#">Menu 1</Link>
                     </NavbarItem>
                     <NavbarItem>
-                        <Link href="/login" color="foreground" >Login</Link>
+                        <Link href="#" color="foreground" >Menu 2</Link>
                     </NavbarItem>
                     <NavbarItem >
-                        <Link href="register" color="foreground" >Register</Link>
+                        <Link href="#" color="foreground" >Menu 3</Link>
                     </NavbarItem>
                 </NavbarContent>
                 <NavbarContent justify="end">
                     {session?.user ?
                         <>
                             <NavbarItem>
-                                User
                                 <p>{session.user?.name || session.user?.user?.name}</p>
                             </NavbarItem>
                             <NavbarItem>
@@ -63,20 +51,72 @@ const NavbarPage = () => {
                         </>
 
                         :
-                        <NavbarItem>
-                            <Link onClick={() => signIn()} href="#">Sign In</Link>
-                        </NavbarItem>
+                        <>
+
+
+                            <Dropdown>
+                                <DropdownTrigger>
+                                    <Button
+                                        variant="bordered"
+                                    >
+                                        Login
+                                    </Button>
+                                </DropdownTrigger>
+                                <DropdownMenu variant="faded">
+
+                                    <DropdownItem
+                                        href='/login-user'
+
+                                    // startContent={<AddNoteIcon className={iconClasses} />}
+                                    >
+                                        Users
+                                    </DropdownItem>
+
+
+                                    <DropdownItem
+                                        href='/login-professional'
+                                    // startContent={<CopyDocumentIcon className={iconClasses} />}
+                                    >
+                                        Professionals
+                                    </DropdownItem>
+                                </DropdownMenu>
+                            </Dropdown>
+
+                            <Dropdown>
+                                <DropdownTrigger>
+                                    <Button
+                                        variant="bordered"
+                                    >
+                                        Register
+                                    </Button>
+                                </DropdownTrigger>
+                                <DropdownMenu variant="faded">
+                                    <DropdownItem
+                                        href='/register-user'
+                                    // startContent={<AddNoteIcon className={iconClasses} />}
+                                    >
+                                        Users
+                                    </DropdownItem>
+                                    <DropdownItem
+                                        href='/register-professional'
+                                    // startContent={<CopyDocumentIcon className={iconClasses} />}
+                                    >
+                                        Professionals
+                                    </DropdownItem>
+                                </DropdownMenu>
+                            </Dropdown>
+                        </>
                     }
                 </NavbarContent>
                 <NavbarMenu>
                     <NavbarMenuItem >
-                        <Link href="#" color="foreground" >Menu1</Link>
+                        <Link href="#" color="foreground" >Menu 1</Link>
                     </NavbarMenuItem>
                     <NavbarMenuItem >
-                        <Link href="/login" color="foreground" >Login</Link>
+                        <Link href="#" color="foreground" >Menu 2</Link>
                     </NavbarMenuItem>
                     <NavbarMenuItem >
-                        <Link href="register" color="foreground" >Register</Link>
+                        <Link href="#" color="foreground" >Menu 3</Link>
                     </NavbarMenuItem>
                 </NavbarMenu>
             </Navbar>

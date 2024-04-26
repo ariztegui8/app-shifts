@@ -6,7 +6,7 @@ import { useState } from "react"
 import { FcGoogle } from 'react-icons/fc';
 
 
-const Login = () => {
+const LoginProfessional = () => {
 
     const [form, setForm] = useState({
         email: '',
@@ -51,27 +51,33 @@ const Login = () => {
         <div className="flex justify-center items-center h-screen px-4">
             <div className="w-[500px] border p-8 rounded-lg">
                 <div>
-                    <h1 className="text-center mb-7 font-semibold text-2xl">Login</h1>
+                    <h1 className="text-center mb-7 font-semibold text-2xl">Login Professionals</h1>
                 </div>
 
                 <form onSubmit={handleFormSubmit}>
-                    <div className="flex flex-col gap-3">
-                        <Input
-                            type="email"
-                            label="Email"
-                            name="email"
-                            value={email}
-                            onChange={handleFormChange}
-                            radius="sm"
-                        />
-                        <Input
-                            type="password"
-                            label="Password"
-                            name="password"
-                            value={password}
-                            onChange={handleFormChange}
-                            radius="sm"
-                        />
+                    <div className="flex flex-col gap-5">
+                        <div className="flex flex-col gap-3">
+                            <Input
+                                type="email"
+                                label="Email"
+                                name="email"
+                                value={email}
+                                onChange={handleFormChange}
+                                radius="sm"
+                                // size="sm"
+                                variant="bordered"
+                            />
+                            <Input
+                                type="password"
+                                label="Password"
+                                name="password"
+                                value={password}
+                                onChange={handleFormChange}
+                                radius="sm"
+                                // size="sm"
+                                variant="bordered"
+                            />
+                        </div>
 
                         {error ? <p className="text-red-500">{error}</p> : null}
                         <Button
@@ -87,9 +93,9 @@ const Login = () => {
 
                     <div >
                         <Button
-                            className="w-full" 
-                            onClick={() => signInGoogle()} 
-                            variant="bordered" 
+                            className="w-full"
+                            onClick={() => signInGoogle()}
+                            variant="bordered"
                             startContent={<FcGoogle size={24} />}
                             radius="sm"
                         >Ingresar con Google
@@ -101,4 +107,4 @@ const Login = () => {
     )
 }
 
-export default Login
+export default LoginProfessional
