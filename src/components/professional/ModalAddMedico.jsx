@@ -1,22 +1,29 @@
-import { Button, Modal, ModalBody, ModalContent, ModalFooter, ModalHeader, useDisclosure } from '@nextui-org/react'
+import { Button, DatePicker, Input, Modal, ModalBody, ModalContent, ModalFooter, ModalHeader, Select, SelectItem, useDisclosure } from '@nextui-org/react'
 import axios from 'axios';
 import React, { useState } from 'react'
 
-const ModalAddMedico = ({consumirApi}) => {
+const ModalAddMedico = ({ consumirApi }) => {
 
     const { isOpen, onOpen, onOpenChange, onClose } = useDisclosure();
 
     const [form, setForm] = useState({
-        title: '',
-        description: '',
-        category: '',
-        author: '',
-        video: ''
+        nombre: '',
+        apellido: '',
+        email: '',
+        domicilio: '',
+        pais: '',
+        dni: '',
+        telefono: '',
+        especialidad: '',
+        matricula: '',
+        fecha: '',
+        hora: '',
+        obraSocial: '',
     })
-
-    const { title, description, category, author, video } = form
-
     const [file, setFile] = useState(null)
+
+    const { nombre, apellido, email, domicilio, pais, telefono, especialidad, dni, matricula, fecha, hora, obraSocial } = form
+
 
     const handleChangeForm = e => {
         if (e.target.name === 'image') {
@@ -30,14 +37,21 @@ const ModalAddMedico = ({consumirApi}) => {
     }
 
     const handleSubmitForm = async (e) => {
-        e.preventDefault()
+        // e.preventDefault()
 
         const formData = new FormData()
-        formData.append('title', form.title)
-        formData.append('description', form.description)
-        formData.append('category', form.category)
-        formData.append('author', form.author)
-        formData.append('video', form.video)
+        formData.append('nombre', form.nombre)
+        formData.append('apellido', form.apellido)
+        formData.append('email', form.email)
+        formData.append('domicilio', form.domicilio)
+        formData.append('pais', form.pais)
+        formData.append('dni', form.dni)
+        formData.append('telefono', form.telefono)
+        formData.append('especialidad', form.especialidad)
+        formData.append('matricula', form.matricula)
+        formData.append('fecha', form.fecha)
+        formData.append('hora', form.hora)
+        formData.append('obraSocial', form.obraSocial)
         if (file) {
             formData.append('image', file)
         }
@@ -55,11 +69,18 @@ const ModalAddMedico = ({consumirApi}) => {
             }
 
             setForm({
-                title: '',
-                description: '',
-                category: '',
-                author: '',
-                video: '',
+                nombre: '',
+                apellido: '',
+                email: '',
+                domicilio: '',
+                pais: '',
+                dni: '',
+                telefono: '',
+                especialidad: '',
+                matricula: '',
+                fecha: '',
+                hora: '',
+                obraSocial: '',
             })
             setFile(null)
         } catch (error) {
@@ -67,84 +88,170 @@ const ModalAddMedico = ({consumirApi}) => {
         }
     }
 
+    const fechas = [
+        { value: "10:00", label: "10:00 hs" },
+        { value: "11:00", label: "11:00 hs" },
+        { value: "11:30", label: "11:30 hs" },
+        { value: "14:00", label: "14:00 hs" },
+        { value: "15:00", label: "15:00 hs" },
+    ]
+
+    const oSocial = [
+        { value: "avalian", label: "avalian" },
+        { value: "sancor", label: "sancor" },
+        { value: "segu", label: "segu" },
+        { value: "galiia", label: "galiia" },
+        { value: "pere", label: "pere" },
+    ]
+
 
     return (
         <div>
-            <Button onPress={onOpen}>Agregar Medico</Button>
+            <Button color='primary' onPress={onOpen}>Agregar Medico</Button>
             <Modal
                 isOpen={isOpen}
                 onOpenChange={onOpenChange}
                 backdrop='blur'
+                size='2xl'
             >
                 <ModalContent>
                     {(onClose) => (
                         <>
-                            <ModalHeader className="flex flex-col gap-1">Modal Title</ModalHeader>
+                            <ModalHeader className="flex flex-col gap-1">Crear Professional</ModalHeader>
                             <ModalBody>
                                 <form onSubmit={handleSubmitForm}>
-                                    <div className='flex flex-col gap-4 mb-6'>
-                                        <input
+                                    <div className='grid grid-cols-2 gap-4 mb-4'>
+                                        <Input
+                                            type="text"
+                                            label="Nombre"
+                                            name="nombre"
+                                            value={nombre}
+                                            onChange={handleChangeForm}
+                                            radius="sm"
+                                            size="sm"
+                                            variant="bordered"
+                                        />
+                                        <Input
+                                            type="text"
+                                            label="Apellido"
+                                            name="apellido"
+                                            value={apellido}
+                                            onChange={handleChangeForm}
+                                            radius="sm"
+                                            size="sm"
+                                            variant="bordered"
+                                        />
+                                        <Input
+                                            type="email"
+                                            label="Email"
+                                            name="email"
+                                            value={email}
+                                            onChange={handleChangeForm}
+                                            radius="sm"
+                                            size="sm"
+                                            variant="bordered"
+                                        />
+                                        <Input
+                                            type="text"
+                                            label="Domicilio"
+                                            name="domicilio"
+                                            value={domicilio}
+                                            onChange={handleChangeForm}
+                                            radius="sm"
+                                            size="sm"
+                                            variant="bordered"
+                                        />
+                                        <Input
+                                            type="text"
+                                            label="Pais"
+                                            name="pais"
+                                            value={pais}
+                                            onChange={handleChangeForm}
+                                            radius="sm"
+                                            size="sm"
+                                            variant="bordered"
+                                        />
+                                        <Input
+                                            type="number"
+                                            label="DNI"
+                                            name="dni"
+                                            value={dni}
+                                            onChange={handleChangeForm}
+                                            radius="sm"
+                                            size="sm"
+                                            variant="bordered"
+                                        />
+                                        <Input
+                                            type="number"
+                                            label="Telefono"
+                                            name="telefono"
+                                            value={telefono}
+                                            onChange={handleChangeForm}
+                                            radius="sm"
+                                            size="sm"
+                                            variant="bordered"
+                                        />
+                                        <Input
+                                            type="text"
+                                            label="Especialidad"
+                                            name="especialidad"
+                                            value={especialidad}
+                                            onChange={handleChangeForm}
+                                            radius="sm"
+                                            size="sm"
+                                            variant="bordered"
+                                        />
+                                        <Input
+                                            type="text"
+                                            label="Matricula"
+                                            name="matricula"
+                                            value={matricula}
+                                            onChange={handleChangeForm}
+                                            radius="sm"
+                                            size="sm"
+                                            variant="bordered"
+                                        />
+                                        <Input
                                             type="file"
-                                            placeholder="Agregar imagen"
-                                            className="input text-[#333333] bg-[#fff] outline-none w-full border-b border-[#333333] py-2 placeholder:text-[#333333] text-sm"
-                                            name='image'
+                                            label="Imagen"
+                                            name="image"
                                             onChange={handleChangeForm}
+                                            radius="sm"
+                                            size="sm"
+                                            variant="bordered"
                                         />
-                                        <input
-                                            type="text"
-                                            placeholder="Título"
-                                            className="input text-[#333333] bg-[#fff] outline-none w-full border-b border-[#333333] py-2 placeholder:text-[#333333] text-sm"
-                                            name='title'
-                                            value={title}
-                                            onChange={handleChangeForm}
-                                            required
+                                        <DatePicker
+                                            label="Birth date"
+                                            radius="sm"
+                                            size="sm"
+                                            variant="bordered"
                                         />
-                                        <input
-                                            type="text"
-                                            placeholder="Autor"
-                                            className="input text-[#333333] bg-[#fff] outline-none w-full border-b border-[#333333] py-2 placeholder:text-[#333333] text-sm"
-                                            name='author'
-                                            value={author}
-                                            onChange={handleChangeForm}
-                                            required
-                                        />
-                                        <textarea
-                                            type="text"
-                                            placeholder="Descripción"
-                                            className="input text-[#333333] bg-[#fff] outline-none w-full border-b border-[#333333] py-2 placeholder:text-[#333333] text-sm"
-                                            name='description'
-                                            value={description}
-                                            onChange={handleChangeForm}
-                                            rows={3}
-                                            required
+                                        <Select
+                                            label="Seleccionar fecha"
+                                            radius="sm"
+                                            size="sm"
+                                            variant="bordered"
                                         >
-                                        </textarea>
-                                        <select
-                                            className="custom-scrollbar text-[#333333] bg-[#fff] outline-none w-full border-b border-[#333333] py-2 placeholder:text-[#333333] text-sm cursor-pointer"
-                                            name='category'
-                                            value={category}
-                                            onChange={handleChangeForm}
-                                            required
-                                        >
-                                            <option value='' disabled >Selecciona una categoría</option>
-                                            <option value='BLOG'>Blog</option>
-                                            <option value='CONVOCATORIA ABIERTA'>Convocatoria abierta</option>
-                                            <option value='OPORTUNIDAD LABORAL'>Oportunidad laboral</option>
-                                            <option value='SALA DE PRENSA'>Sala de prensa</option>
-                                            <option value='PROGAMA'>Programa</option>
-                                        </select>
-                                        <input
-                                            type="text"
-                                            placeholder="ID del video de YouTube ej: O7oxdswgr1Q"
-                                            className="input text-[#333333] bg-[#fff] outline-none w-full border-b border-[#333333] py-2 placeholder:text-[#333333] text-sm"
-                                            name='video'
-                                            value={video}
-                                            onChange={handleChangeForm}
-                                        />
+                                            {fechas.map((date) => (
+                                                <SelectItem key={date.value} value={date.value}>
+                                                    {date.label}
+                                                </SelectItem>
+                                            ))}
+                                        </Select>
                                     </div>
-
-                                    <div className='flex justify-end'>
-                                        <button type='submit' className={`bg-[#c1285d] text-white text-[15px] py-1.5 px-6 rounded-full hover:bg-[#aa2251] w-max `}>Agregar</button>
+                                    <div className='grid grid-cols-1 gap-4'>
+                                        <Select
+                                            label="Seleccionar Obra Social"
+                                            radius="sm"
+                                            size="sm"
+                                            variant="bordered"
+                                        >
+                                            {oSocial.map((seg) => (
+                                                <SelectItem key={seg.value} value={seg.value}>
+                                                    {seg.label}
+                                                </SelectItem>
+                                            ))}
+                                        </Select>
                                     </div>
                                 </form>
                             </ModalBody>
@@ -152,8 +259,12 @@ const ModalAddMedico = ({consumirApi}) => {
                                 <Button color="danger" variant="light" onPress={onClose}>
                                     Close
                                 </Button>
-                                <Button color="primary" onPress={onClose}>
-                                    Action
+                                <Button
+                                    type='submit'
+                                    color="primary"
+                                    onPress={handleSubmitForm}
+                                >
+                                    Agregar
                                 </Button>
                             </ModalFooter>
                         </>

@@ -67,6 +67,7 @@ const DashboardAdmin = () => {
                 key={prof._id}
                 prof={prof}
                 viewType={viewType}
+                setProfessionals={setProfessionals}
               />
             ))
             :

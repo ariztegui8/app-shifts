@@ -14,6 +14,7 @@ const LoginUser = () => {
     })
     const [userType, setUserType] = useState('user');
     const [error, setError] = useState('')
+    const [loading, setLoading] = useState(false);
 
     const router = useRouter()
 
@@ -28,6 +29,7 @@ const LoginUser = () => {
 
     const handleFormSubmit = async (e) => {
         e.preventDefault()
+        setLoading(true);
 
         const res = await signIn('credentials', {
             email,
@@ -35,6 +37,7 @@ const LoginUser = () => {
             userType,
             redirect: false,
         })
+        setLoading(false);
         console.log('res', res);
 
         if (res?.error) return setError(res.error)
@@ -86,8 +89,9 @@ const LoginUser = () => {
                             color="primary"
                             type="submit"
                             radius="sm"
+                            isLoading={loading}
                         >
-                            Ingresar
+                            {loading ? 'Cargando...' : 'Ingresar'}
                         </Button>
                     </div>
 
