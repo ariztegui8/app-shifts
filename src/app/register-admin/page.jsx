@@ -1,23 +1,23 @@
 'use client'
-import { Button, Divider, Input } from "@nextui-org/react"
-import { signIn } from "next-auth/react"
+import { Button, Input } from "@nextui-org/react"
+import axios from "axios"
 import { useRouter } from "next/navigation"
 import { useState } from "react"
-import { FcGoogle } from 'react-icons/fc';
 
 
-const LoginProfessional = () => {
+const RegisterAdmin = () => {
 
     const [form, setForm] = useState({
         email: '',
-        password: ''
+        password: '',
+        name: '',
+        apellido: '',
+        pais: '',
     })
-    const [userType, setUserType] = useState('professional');
-    const [error, setError] = useState('')
 
     const router = useRouter()
 
-    const { email, password } = form
+    const { email, password, name, apellido, pais } = form
 
     const handleFormChange = e => {
         setForm({
@@ -29,36 +29,53 @@ const LoginProfessional = () => {
     const handleFormSubmit = async (e) => {
         e.preventDefault()
 
-        const res = await signIn('credentials', {
-            email,
-            password,
-            userType,
-            redirect: false,
-        })
-        console.log('res', res);
-
-        if (res?.error) return setError(res.error)
-
-        if (res?.ok) {
-            return router.push('/dashboard');
+        try {
+            const response = await axios.post(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/auth-admin/`, form);
+            console.log(response.data);
+            router.push('/login-admin');
+        } catch (error) {
+            console.error('Error en el registro:', error.response?.data);
         }
 
-    }
-
-    const signInGoogle = async () => {
-        await signIn('google', { callbackUrl: '/dashboard' })
     }
 
     return (
         <div className="flex justify-center items-center h-screen px-4">
             <div className="w-[500px] border p-8 rounded-lg">
                 <div>
-                    <h1 className="text-center mb-7 font-semibold text-2xl">Login Professionals</h1>
+                    <h1 className="text-center mb-7 font-semibold text-2xl">Register Admin</h1>
                 </div>
 
                 <form onSubmit={handleFormSubmit}>
                     <div className="flex flex-col gap-5">
                         <div className="flex flex-col gap-3">
+                            <Input
+                                type="text"
+                                label="Nombre"
+                                name="name"
+                                value={name}
+                                onChange={handleFormChange}
+                                radius="sm"
+                                variant="bordered"
+                            />
+                            <Input
+                                type="text"
+                                label="Apellido"
+                                name="apellido"
+                                value={apellido}
+                                onChange={handleFormChange}
+                                radius="sm"
+                                variant="bordered"
+                            />
+                            <Input
+                                type="text"
+                                label="Pais"
+                                name="pais"
+                                value={pais}
+                                onChange={handleFormChange}
+                                radius="sm"
+                                variant="bordered"
+                            />
                             <Input
                                 type="email"
                                 label="Email"
@@ -66,7 +83,6 @@ const LoginProfessional = () => {
                                 value={email}
                                 onChange={handleFormChange}
                                 radius="sm"
-                                // size="sm"
                                 variant="bordered"
                             />
                             <Input
@@ -76,37 +92,22 @@ const LoginProfessional = () => {
                                 value={password}
                                 onChange={handleFormChange}
                                 radius="sm"
-                                // size="sm"
                                 variant="bordered"
                             />
                         </div>
-
-                        {error ? <p className="text-red-500">{error}</p> : null}
                         <Button
                             color="primary"
                             type="submit"
                             radius="sm"
                         >
-                            Ingresar
+                            Registrar
                         </Button>
                     </div>
 
-                    <Divider className="my-4" />
-
-                    <div >
-                        <Button
-                            className="w-full"
-                            onClick={() => signInGoogle()}
-                            variant="bordered"
-                            startContent={<FcGoogle size={24} />}
-                            radius="sm"
-                        >Ingresar con Google
-                        </Button>
-                    </div>
                 </form>
             </div>
         </div>
     )
 }
 
-export default LoginProfessional
+export default RegisterAdmin

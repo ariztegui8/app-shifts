@@ -9,11 +9,11 @@ const handler = NextAuth({
       credentials: {
         email: { label: "Email", type: "text" },
         password: { label: "Password", type: "password" },
-        userType: { label: "User Type", type: "text" }
+        rol: { label: "User Type", type: "text" }
       },
       async authorize(credentials, req) {
-        const endpoint = credentials.userType === 'professional'
-          ? '/api/auth-professional/login'
+        const endpoint = credentials.rol === 'admin'
+          ? '/api/auth-admin/login'
           : '/api/auth-user/login';
 
         const res = await fetch(
@@ -44,15 +44,43 @@ const handler = NextAuth({
     }),
   ],
 
+  // callbacks: {
+  //   async jwt({ token, user }) {
+  //     return { ...token, ...user }
+  //   },
+  //   async session({ session, token }) {
+  //     session.user = token;
+  //     return session;
+  //   }
+  // },
+  
   callbacks: {
     async jwt({ token, user }) {
-      return { ...token, ...user }
+        if (user) {
+            token.id = user.id;
+            token.picture = user.picture;
+            token.email = user.email;
+            token.name = user.name;
+            token.apellido = user.apellido;
+            token.pais = user.pais;
+            token.rol = user.rol;
+        }
+        return token;
     },
+    
     async session({ session, token }) {
-      session.user = token;
-      return session;
+        session.user = {
+            id: token.id,
+            picture: token.picture,
+            email: token.email,
+            name: token.name,
+            apellido: token.apellido,
+            pais: token.pais,
+            rol: token.rol,
+        };
+        return session;
     }
-  },
+},
 
   pages: {
     signIn: '/login-user',

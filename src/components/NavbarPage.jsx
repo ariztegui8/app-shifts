@@ -14,7 +14,7 @@ const NavbarPage = () => {
 
     return (
         <div className=''>
-            <Navbar className='bg-gray-50' onMenuOpenChange={setIsMenuOpen}>
+            <Navbar className='bg-gray-50' onMenuOpenChange={setIsMenuOpen} >
                 <NavbarContent >
                     <NavbarMenuToggle
                         aria-label={isMenuOpen ? "Close menu" : "Open menu"}
@@ -30,7 +30,7 @@ const NavbarPage = () => {
 
                 <NavbarContent className="hidden sm:flex gap-4" justify="center">
                     <NavbarItem>
-                        <Link color="foreground" href="/shifts">Shifts</Link>
+                        <Link color="foreground" href="#">Menu 1</Link>
                     </NavbarItem>
                     <NavbarItem>
                         <Link href="#" color="foreground" >Menu 2</Link>
@@ -43,7 +43,7 @@ const NavbarPage = () => {
                     {session?.user ?
                         <>
                             <NavbarItem>
-                                <p>{session.user?.name || session.user?.user?.name}</p>
+                                <p>{session.user?.name}</p>
                             </NavbarItem>
                             <NavbarItem>
                                 <Link onClick={() => signOut()} href="#">Logout</Link>
@@ -74,10 +74,10 @@ const NavbarPage = () => {
 
 
                                     <DropdownItem
-                                        href='/login-professional'
+                                        href='/login-admin'
                                     // startContent={<CopyDocumentIcon className={iconClasses} />}
                                     >
-                                        Professionals
+                                        Admin
                                     </DropdownItem>
                                 </DropdownMenu>
                             </Dropdown>
@@ -98,10 +98,10 @@ const NavbarPage = () => {
                                         Users
                                     </DropdownItem>
                                     <DropdownItem
-                                        href='/register-professional'
+                                        href='/register-admin'
                                     // startContent={<CopyDocumentIcon className={iconClasses} />}
                                     >
-                                        Professionals
+                                        Admin
                                     </DropdownItem>
                                 </DropdownMenu>
                             </Dropdown>
@@ -110,7 +110,7 @@ const NavbarPage = () => {
                 </NavbarContent>
                 <NavbarMenu>
                     <NavbarMenuItem >
-                        <Link color="foreground" href="/shifts">Shifts</Link>
+                        <Link color="foreground" href="#">Menu 1</Link>
                     </NavbarMenuItem>
                     <NavbarMenuItem >
                         <Link href="#" color="foreground" >Menu 2</Link>

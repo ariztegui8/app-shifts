@@ -6,13 +6,13 @@ import { useState } from "react"
 import { FcGoogle } from 'react-icons/fc';
 
 
-const LoginUser = () => {
+const LoginAdmin = () => {
 
     const [form, setForm] = useState({
         email: '',
         password: ''
     })
-    const [userType, setUserType] = useState('user');
+    const [userType, setUserType] = useState('admin');
     const [error, setError] = useState('')
 
     const router = useRouter()
@@ -40,20 +40,20 @@ const LoginUser = () => {
         if (res?.error) return setError(res.error)
 
         if (res?.ok) {
-            return router.push('/dashboard-user');
+            return router.push('/dashboard-admin');
         }
 
     }
 
-    const signInGoogle = async () => {
-        await signIn('google', { callbackUrl: '/dashboard-user' })
-    }
+    // const signInGoogle = async () => {
+    //     await signIn('google', { callbackUrl: '/dashboard' })
+    // }
 
     return (
         <div className="flex justify-center items-center h-screen px-4">
             <div className="w-[500px] border p-8 rounded-lg">
                 <div>
-                    <h1 className="text-center mb-7 font-semibold text-2xl">Login User</h1>
+                    <h1 className="text-center mb-7 font-semibold text-2xl">Login Admin</h1>
                 </div>
 
                 <form onSubmit={handleFormSubmit}>
@@ -91,7 +91,7 @@ const LoginUser = () => {
                         </Button>
                     </div>
 
-                    <Divider className="my-4" />
+                    {/* <Divider className="my-4" />
 
                     <div >
                         <Button
@@ -102,11 +102,11 @@ const LoginUser = () => {
                             radius="sm"
                         >Ingresar con Google
                         </Button>
-                    </div>
+                    </div> */}
                 </form>
             </div>
         </div>
     )
 }
 
-export default LoginUser
+export default LoginAdmin

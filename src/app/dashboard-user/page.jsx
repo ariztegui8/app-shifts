@@ -2,7 +2,7 @@
 import React from 'react'
 import { useSession, signIn, signOut } from "next-auth/react"
 
-const Dashboard = () => {
+const DashboardUser = () => {
 
   const { data: session, status } = useSession()
 
@@ -17,4 +17,4 @@ const Dashboard = () => {
   )
 }
 
-export default Dashboard
+export default DashboardUser

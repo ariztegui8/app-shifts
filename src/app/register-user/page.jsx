@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation"
 import { useState } from "react"
 
 
-const Register = () => {
+const RegisterUser = () => {
 
     const [form, setForm] = useState({
         email: '',
@@ -110,4 +110,4 @@ const Register = () => {
     )
 }
 
-export default Register
+export default RegisterUser
