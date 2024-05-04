@@ -3,6 +3,7 @@ import axios from "axios";
 import { IoSearch } from "react-icons/io5";
 import { FaList } from "react-icons/fa";
 import { MdAutoAwesomeMosaic } from "react-icons/md";
+import { Button, Input } from '@nextui-org/react';
 
 const SearchProfessional = ({ setProfessionals, changeType, viewType }) => {
     const [search, setSearch] = useState('');
@@ -37,17 +38,24 @@ const SearchProfessional = ({ setProfessionals, changeType, viewType }) => {
     return (
         <div className="flex flex-col gap-6 items-start md:flex-row md:items-center md:gap-10">
             <div className='flex items-center gap-4'>
-                <input
+               
+                <Input
                     type="text"
+                    label="Buscar professional"
                     value={search}
                     onChange={handleChangeSearch}
-                    placeholder="Buscar artículos..."
-                    className="input text-[#333333] bg-[#fff] outline-none w-full border-b border-[#333333] py-2 placeholder:text-[#333333] text-sm"
+                    radius="sm"
+                    size="sm"
+                    variant="bordered"
                 />
-                <div onClick={fetchData} className='bg-[#c1285d] text-white cursor-pointer py-1 px-2 rounded-full hover:bg-[#aa2251] w-max flex gap-2 items-center'>
-                    <IoSearch size={18} color="#fff" />
-                    <p>Buscar</p>
-                </div>
+                {/* <Button 
+                    onClick={fetchData}
+                    endContent={<IoSearch size={18} color="#333333" />}
+                    radius="sm"
+                    variant="bordered"
+                >
+                    Buscar
+                </Button> */}
             </div>
 
             <div className='flex gap-2'>

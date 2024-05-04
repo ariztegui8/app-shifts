@@ -7,13 +7,16 @@ import CardProfessional from '@/components/professional/CardProfessional';
 import axios from 'axios';
 import SearchProfessional from '@/components/professional/searchProfessional';
 import PaginatorProfessional from '@/components/professional/PaginatorProfessional';
+import ModalAddObraSocial from '@/components/obraSocial/ModalAddObraSocial';
+import ListObrasSociales from '@/components/obraSocial/ListObrasSociales';
+import ModalAddDisponibilidad from '@/components/disponibilidad/ModalAddDisponibilidad';
 
 const DashboardAdmin = () => {
 
   const [professionals, setProfessionals] = useState([]);
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(0);
-  const [viewType , setViewType] = useState('card')
+  const [viewType, setViewType] = useState('card')
 
   const { data: session, status } = useSession()
 
@@ -38,17 +41,13 @@ const DashboardAdmin = () => {
 
   const changeType = (type) => {
     setViewType(type)
-}
+  }
 
 
   return (
     <div className='p-4'>
-      <div ref={scroll} className='flex justify-between gap-2 items-center mb-4'>
+      <div ref={scroll} className=' mb-4'>
         <h1 className='text-2xl font-semibold'>Dashboard</h1>
-
-        <ModalAddMedico
-          consumirApi={consumirApi}
-        />
       </div>
 
       <div className='mb-6'>
@@ -60,6 +59,12 @@ const DashboardAdmin = () => {
       </div>
 
       <div className="">
+        <div className='mb-6 flex items-center gap-6'>
+          <p className='text-xl font-semibold '>Professionals</p>
+          <ModalAddMedico
+            consumirApi={consumirApi}
+          />
+        </div>
         <div className={`grid gap-3 mb-6 duration-500 ${viewType === 'list' ? 'grid-cols-1' : 'grid-cols-1 md:grid-cols-3 lg:grid-cols-4'}`}>
           {professionals.length > 0 ?
             professionals.map(prof => (
@@ -74,6 +79,25 @@ const DashboardAdmin = () => {
             <p className="col-span-full text-center">No hay artículos disponibles.</p>
           }
         </div>
+
+        <div className='mb-6'>
+          <div className=' mb-6 flex items-center gap-6'>
+            <p className='text-xl font-semibold'>Obra sociales</p>
+            <ModalAddObraSocial />
+          </div>
+
+          <ListObrasSociales />
+        </div>
+
+        {/* <div className='mb-6'>
+          <div className=' mb-6 flex items-center gap-6'>
+            <p className='text-xl font-semibold'>Disponibilidad</p>
+            <ModalAddDisponibilidad 
+              
+            />
+          </div>
+        </div> */}
+
         {professionals.length > 0 ?
           <PaginatorProfessional
             page={page}

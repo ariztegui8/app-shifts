@@ -13,8 +13,8 @@ const handler = NextAuth({
       },
       async authorize(credentials, req) {
         const endpoint = credentials.rol === 'admin'
-          ? '/api/auth-admin/login'
-          : '/api/auth-user/login';
+          ? '/api/authAdmin/login'
+          : '/api/authUser/login';
 
         const res = await fetch(
           `${process.env.NEXT_PUBLIC_API_BASE_URL}${endpoint}`,

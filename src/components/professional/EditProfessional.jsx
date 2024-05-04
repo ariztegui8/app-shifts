@@ -2,7 +2,7 @@ import { Button, Modal, ModalBody, ModalContent, ModalFooter, ModalHeader, useDi
 import axios from 'axios';
 import React, { useEffect, useState } from 'react'
 
-const EditProfessional = ({setProfessionals, prof }) => {
+const EditProfessional = ({ setProfessionals, prof }) => {
 
     const { isOpen, onOpen, onOpenChange, onClose } = useDisclosure();
 
@@ -33,7 +33,7 @@ const EditProfessional = ({setProfessionals, prof }) => {
 
     const handleChangeForm = e => {
         if (e.target.name === 'image') {
-            setFile(e.target.files[0]); 
+            setFile(e.target.files[0]);
         } else {
             setForm(prevForm => ({
                 ...prevForm,
@@ -66,7 +66,7 @@ const EditProfessional = ({setProfessionals, prof }) => {
                 data: formData,
                 headers: { 'Content-Type': 'multipart/form-data' },
             })
-    
+
             if (response.status === 200) {
                 console.log("Professional actualizado", response.data)
                 setProfessionals(prevProf => prevProf.map(profes => profes._id === prof._id ? response.data : profes))
@@ -79,7 +79,7 @@ const EditProfessional = ({setProfessionals, prof }) => {
         }
     }
 
-    const handleButtonClickEdit = (e) => { 
+    const handleButtonClickEdit = (e) => {
         e.stopPropagation();
         onOpen();
     }
@@ -103,9 +103,9 @@ const EditProfessional = ({setProfessionals, prof }) => {
                 <ModalContent>
                     {(onClose) => (
                         <>
-                            <ModalHeader className="flex flex-col gap-1">Actualizar Professional</ModalHeader>
-                            <ModalBody>
-                                <form onSubmit={handleSubmitForm}>
+                            <form onSubmit={handleSubmitForm}>
+                                <ModalHeader className="flex flex-col gap-1">Actualizar Professional</ModalHeader>
+                                <ModalBody>
                                     <div className='flex flex-col gap-4 mb-6'>
                                         <input
                                             type="file"
@@ -166,21 +166,19 @@ const EditProfessional = ({setProfessionals, prof }) => {
                                             onChange={handleChangeForm}
                                         />
                                     </div>
-
-                                </form>
-                            </ModalBody>
-                            <ModalFooter>
-                                <Button color="danger" variant="light" onPress={onClose}>
-                                    Close
-                                </Button>
-                                <Button 
-                                    type='submit'
-                                    color="primary" 
-                                    onPress={handleSubmitForm}
-                                >
-                                    Actualizar
-                                </Button>
-                            </ModalFooter>
+                                </ModalBody>
+                                <ModalFooter>
+                                    <Button color="danger" variant="light" onPress={onClose}>
+                                        Close
+                                    </Button>
+                                    <Button
+                                        type='submit'
+                                        color="primary"
+                                    >
+                                        Actualizar
+                                    </Button>
+                                </ModalFooter>
+                            </form>
                         </>
                     )}
                 </ModalContent>

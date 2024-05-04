@@ -30,7 +30,7 @@ const RegisterAdmin = () => {
         e.preventDefault()
 
         try {
-            const response = await axios.post(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/auth-admin/`, form);
+            const response = await axios.post(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/authAdmin/`, form);
             console.log(response.data);
             router.push('/login-admin');
         } catch (error) {

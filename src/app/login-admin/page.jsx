@@ -38,13 +38,13 @@ const LoginAdmin = () => {
             userType,
             redirect: false,
         })
-        setLoading(false);
+
         console.log('res', res);
-
-        if (res?.error) return setError(res.error)
-
-        if (res?.ok) {
-            return router.push('/dashboard-admin');
+        if (res?.error) {
+            setError(res.error);
+            setLoading(false);
+        } else if (res?.ok) {
+            router.push('/dashboard-admin');
         }
 
     }
@@ -55,6 +55,11 @@ const LoginAdmin = () => {
 
     return (
         <div className="flex justify-center items-center h-screen px-4">
+            {loading ?
+                <ClipLoader 
+                    color="#135af3" 
+                    size={50} />
+                :
                 <div className="w-[500px] border p-8 rounded-lg">
                     <div>
                         <h1 className="text-center mb-7 font-semibold text-2xl">Login Admin</h1>
@@ -110,6 +115,8 @@ const LoginAdmin = () => {
                    </div> */}
                     </form>
                 </div>
+            }
+
         </div>
     )
 }

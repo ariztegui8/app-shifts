@@ -1,6 +1,9 @@
-import { Button, DatePicker, Input, Modal, ModalBody, ModalContent, ModalFooter, ModalHeader, Select, SelectItem, useDisclosure } from '@nextui-org/react'
+import { Button, Input, Modal, ModalBody, ModalContent, ModalFooter, ModalHeader, Select, SelectItem, useDisclosure } from '@nextui-org/react'
 import axios from 'axios';
 import React, { useState } from 'react'
+import DatePicker from 'react-datepicker';
+import 'react-datepicker/dist/react-datepicker.css';
+
 
 const ModalAddMedico = ({ consumirApi }) => {
 
@@ -16,13 +19,31 @@ const ModalAddMedico = ({ consumirApi }) => {
         telefono: '',
         especialidad: '',
         matricula: '',
-        fecha: '',
-        hora: '',
         obraSocial: '',
+        availableDates: []
     })
     const [file, setFile] = useState(null)
+    const [selectedDates, setSelectedDates] = useState([]);
+    const [key, setKey] = useState(0);
 
-    const { nombre, apellido, email, domicilio, pais, telefono, especialidad, dni, matricula, fecha, hora, obraSocial } = form
+    const handleDateChange = (date) => {
+        const index = selectedDates.findIndex(selectedDate =>
+            new Date(selectedDate).toDateString() === new Date(date).toDateString()
+        );
+        if (index >= 0) {
+            const newSelectedDates = selectedDates.filter((_, i) => i !== index);
+            setSelectedDates(newSelectedDates);
+        } else {
+            const newSelectedDates = [...selectedDates, date];
+            setSelectedDates(newSelectedDates);
+        }
+       
+        setKey(prevKey => prevKey + 1);
+    };
+
+
+
+    const { nombre, apellido, email, domicilio, pais, telefono, especialidad, dni, matricula, obraSocial } = form
 
 
     const handleChangeForm = e => {
@@ -36,8 +57,12 @@ const ModalAddMedico = ({ consumirApi }) => {
         }
     }
 
+
     const handleSubmitForm = async (e) => {
-        // e.preventDefault()
+        e.preventDefault();
+        const formattedDates = selectedDates.map(date =>
+            date.toISOString().split('T')[0]
+        );
 
         const formData = new FormData()
         formData.append('nombre', form.nombre)
@@ -49,9 +74,9 @@ const ModalAddMedico = ({ consumirApi }) => {
         formData.append('telefono', form.telefono)
         formData.append('especialidad', form.especialidad)
         formData.append('matricula', form.matricula)
-        formData.append('fecha', form.fecha)
-        formData.append('hora', form.hora)
         formData.append('obraSocial', form.obraSocial)
+        formData.append('availableDates', JSON.stringify(formattedDates));
+
         if (file) {
             formData.append('image', file)
         }
@@ -78,23 +103,14 @@ const ModalAddMedico = ({ consumirApi }) => {
                 telefono: '',
                 especialidad: '',
                 matricula: '',
-                fecha: '',
-                hora: '',
                 obraSocial: '',
             })
+            setSelectedDates([]);
             setFile(null)
         } catch (error) {
             console.error('Error', error.response ? error.response.data : error.message)
         }
     }
-
-    const fechas = [
-        { value: "10:00", label: "10:00 hs" },
-        { value: "11:00", label: "11:00 hs" },
-        { value: "11:30", label: "11:30 hs" },
-        { value: "14:00", label: "14:00 hs" },
-        { value: "15:00", label: "15:00 hs" },
-    ]
 
     const oSocial = [
         { value: "avalian", label: "avalian" },
@@ -107,19 +123,20 @@ const ModalAddMedico = ({ consumirApi }) => {
 
     return (
         <div>
-            <Button color='primary' onPress={onOpen}>Agregar Medico</Button>
+            <Button size="sm" color='primary' onPress={onOpen}>Agregar Medico</Button>
             <Modal
                 isOpen={isOpen}
                 onOpenChange={onOpenChange}
                 backdrop='blur'
                 size='2xl'
+                scrollBehavior='outside'
             >
                 <ModalContent>
                     {(onClose) => (
                         <>
-                            <ModalHeader className="flex flex-col gap-1">Crear Professional</ModalHeader>
-                            <ModalBody>
-                                <form onSubmit={handleSubmitForm}>
+                            <form onSubmit={handleSubmitForm}>
+                                <ModalHeader className="flex flex-col gap-1">Crear Professional</ModalHeader>
+                                <ModalBody>
                                     <div className='grid grid-cols-2 gap-4 mb-4'>
                                         <Input
                                             type="text"
@@ -130,6 +147,7 @@ const ModalAddMedico = ({ consumirApi }) => {
                                             radius="sm"
                                             size="sm"
                                             variant="bordered"
+                                            isRequired
                                         />
                                         <Input
                                             type="text"
@@ -140,6 +158,7 @@ const ModalAddMedico = ({ consumirApi }) => {
                                             radius="sm"
                                             size="sm"
                                             variant="bordered"
+                                            isRequired
                                         />
                                         <Input
                                             type="email"
@@ -200,6 +219,7 @@ const ModalAddMedico = ({ consumirApi }) => {
                                             radius="sm"
                                             size="sm"
                                             variant="bordered"
+                                            isRequired
                                         />
                                         <Input
                                             type="text"
@@ -220,24 +240,19 @@ const ModalAddMedico = ({ consumirApi }) => {
                                             size="sm"
                                             variant="bordered"
                                         />
-                                        <DatePicker
-                                            label="Birth date"
-                                            radius="sm"
-                                            size="sm"
-                                            variant="bordered"
-                                        />
-                                        <Select
-                                            label="Seleccionar fecha"
-                                            radius="sm"
-                                            size="sm"
-                                            variant="bordered"
-                                        >
-                                            {fechas.map((date) => (
-                                                <SelectItem key={date.value} value={date.value}>
-                                                    {date.label}
-                                                </SelectItem>
-                                            ))}
-                                        </Select>
+
+                                        <div>
+                                            <h2>Seleccione múltiples fechas</h2>
+                                            <DatePicker
+                                                key={key}
+                                                selected={null}
+                                                onChange={handleDateChange}
+                                                highlightDates={selectedDates}
+                                                inline
+                                            />
+                                        </div>
+
+
                                     </div>
                                     <div className='grid grid-cols-1 gap-4'>
                                         <Select
@@ -253,20 +268,21 @@ const ModalAddMedico = ({ consumirApi }) => {
                                             ))}
                                         </Select>
                                     </div>
-                                </form>
-                            </ModalBody>
-                            <ModalFooter>
-                                <Button color="danger" variant="light" onPress={onClose}>
-                                    Close
-                                </Button>
-                                <Button
-                                    type='submit'
-                                    color="primary"
-                                    onPress={handleSubmitForm}
-                                >
-                                    Agregar
-                                </Button>
-                            </ModalFooter>
+                                </ModalBody>
+                                <ModalFooter>
+                                    <Button color="danger" variant="light" onPress={onClose}>
+                                        Close
+                                    </Button>
+                                    <Button
+                                        type='submit'
+                                        // htmlType='submit'
+                                        color="primary"
+                                    // onPress={handleSubmitForm}
+                                    >
+                                        Agregar
+                                    </Button>
+                                </ModalFooter>
+                            </form>
                         </>
                     )}
                 </ModalContent>

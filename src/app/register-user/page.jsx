@@ -30,7 +30,7 @@ const RegisterUser = () => {
         e.preventDefault()
 
         try {
-            const response = await axios.post(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/auth-user/`, form);
+            const response = await axios.post(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/authUser/`, form);
             console.log(response.data);
             router.push('/login-user');
         } catch (error) {
