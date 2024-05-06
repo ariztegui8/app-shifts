@@ -1,8 +1,11 @@
 import { Button, Input, Modal, ModalBody, ModalContent, ModalFooter, ModalHeader, Select, SelectItem, useDisclosure } from '@nextui-org/react'
 import axios from 'axios';
 import React, { useState } from 'react'
-import DatePicker from 'react-datepicker';
-import 'react-datepicker/dist/react-datepicker.css';
+import { Calendar, momentLocalizer } from 'react-big-calendar';
+import moment from 'moment';
+import 'react-big-calendar/lib/css/react-big-calendar.css';
+
+const localizer = momentLocalizer(moment);
 
 
 const ModalAddMedico = ({ consumirApi }) => {
@@ -22,26 +25,10 @@ const ModalAddMedico = ({ consumirApi }) => {
         obraSocial: '',
         availableDates: []
     })
+    const [events, setEvents] = useState([]);
+    const [view, setView] = useState('week');
+    const [date, setDate] = useState(new Date());
     const [file, setFile] = useState(null)
-    const [selectedDates, setSelectedDates] = useState([]);
-    const [key, setKey] = useState(0);
-
-    const handleDateChange = (date) => {
-        const index = selectedDates.findIndex(selectedDate =>
-            new Date(selectedDate).toDateString() === new Date(date).toDateString()
-        );
-        if (index >= 0) {
-            const newSelectedDates = selectedDates.filter((_, i) => i !== index);
-            setSelectedDates(newSelectedDates);
-        } else {
-            const newSelectedDates = [...selectedDates, date];
-            setSelectedDates(newSelectedDates);
-        }
-       
-        setKey(prevKey => prevKey + 1);
-    };
-
-
 
     const { nombre, apellido, email, domicilio, pais, telefono, especialidad, dni, matricula, obraSocial } = form
 
@@ -57,12 +44,41 @@ const ModalAddMedico = ({ consumirApi }) => {
         }
     }
 
+    const handleSelectSlot = ({ start, end }) => {
+        const title = window.prompt('Introduce un título para el nuevo horario:');
+        if (title) {
+            const newEvent = { start, end, title };
+            setForm(prevForm => ({
+                ...prevForm,
+                availableDates: [...prevForm.availableDates, newEvent]
+            }));
+        }
+    };
+
+    const handleNavigate = newDate => {
+        setDate(newDate);
+    };
+
+    const handleViewChange = newView => {
+        setView(newView);
+    };
+
+    const minTime = new Date();
+    minTime.setHours(7, 0, 0);
+
+    const maxTime = new Date();
+    maxTime.setHours(21, 0, 0);
+
 
     const handleSubmitForm = async (e) => {
         e.preventDefault();
-        const formattedDates = selectedDates.map(date =>
-            date.toISOString().split('T')[0]
-        );
+
+        const formattedDates = form.availableDates.map(event => ({
+            ...event,
+            start: moment(event.start).format("YYYY-MM-DD HH:mm:ss"), // Formateando la fecha de inicio
+            end: moment(event.end).format("YYYY-MM-DD HH:mm:ss"), // Formateando la fecha de fin
+            title: event.title
+        }));
 
         const formData = new FormData()
         formData.append('nombre', form.nombre)
@@ -104,8 +120,8 @@ const ModalAddMedico = ({ consumirApi }) => {
                 especialidad: '',
                 matricula: '',
                 obraSocial: '',
+                availableDates: []
             })
-            setSelectedDates([]);
             setFile(null)
         } catch (error) {
             console.error('Error', error.response ? error.response.data : error.message)
@@ -241,16 +257,6 @@ const ModalAddMedico = ({ consumirApi }) => {
                                             variant="bordered"
                                         />
 
-                                        <div>
-                                            <h2>Seleccione múltiples fechas</h2>
-                                            <DatePicker
-                                                key={key}
-                                                selected={null}
-                                                onChange={handleDateChange}
-                                                highlightDates={selectedDates}
-                                                inline
-                                            />
-                                        </div>
 
 
                                     </div>
@@ -267,6 +273,27 @@ const ModalAddMedico = ({ consumirApi }) => {
                                                 </SelectItem>
                                             ))}
                                         </Select>
+
+                                        <div>
+                                            <Calendar
+                                                localizer={localizer}
+                                                events={form.availableDates.map(event => ({
+                                                    ...event,
+                                                    start: new Date(event.start),
+                                                    end: new Date(event.end)
+                                                }))}
+                                                date={date}
+                                                onView={handleViewChange}
+                                                onNavigate={handleNavigate}
+                                                view={view}
+                                                onSelectSlot={handleSelectSlot}
+                                                selectable={true}
+                                                defaultView="week"
+                                                style={{ height: 500 }}
+                                                min={minTime}
+                                                max={maxTime}
+                                            />
+                                        </div>
                                     </div>
                                 </ModalBody>
                                 <ModalFooter>
