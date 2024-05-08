@@ -6,7 +6,9 @@ import axios from 'axios'
 
 const DashboardUser = () => {
 
+  const [professionals, setProfessionals] = useState([]);
   const [obrasSociales, setObrasSociales] = useState([]);
+  const [especialidades, setEspecialidades] = useState([]);
 
   const { data: session, status } = useSession()
 
@@ -20,8 +22,30 @@ const DashboardUser = () => {
     }
   }
 
+  const consumirApiProfessional = async () => {
+    try {
+      const { data } = await axios.get(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/professional`)
+      setProfessionals(data.professional || [])
+    } catch (error) {
+      console.error('Error obteniendo professionals', error)
+      setProfessionals([])
+    }
+  }
+
+  const consumirApiEspecialidad = async () => {
+    try {
+      const { data } = await axios.get(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/especialidad`)
+      setEspecialidades(data || [])
+    } catch (error) {
+      console.error('Error obteniendo especialidad', error)
+      setEspecialidades([])
+    }
+  }
+
   useEffect(() => {
     consumirApiObraSocial();
+    consumirApiProfessional();
+    consumirApiEspecialidad();  
   }, [])
 
   return (
@@ -34,6 +58,8 @@ const DashboardUser = () => {
         <div>
           <NewShifts 
             obrasSociales={obrasSociales}
+            professionals={professionals} 
+            especialidades={especialidades}
           />
         </div>
       </div>
