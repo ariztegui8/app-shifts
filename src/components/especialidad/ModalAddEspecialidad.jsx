@@ -2,7 +2,7 @@ import { Button, DatePicker, Input, Modal, ModalBody, ModalContent, ModalFooter,
 import axios from 'axios';
 import React, { useState } from 'react'
 
-const ModalAddObraSocial = ({consumirApiObraSocial}) => {
+const ModalAddEspecialidad = ({consumirApiEspecialidad}) => {
 
     const { isOpen, onOpen, onOpenChange, onClose } = useDisclosure();
 
@@ -11,14 +11,14 @@ const ModalAddObraSocial = ({consumirApiObraSocial}) => {
     const handleSubmitForm = async (e) => {
         e.preventDefault();
         try {
-            const response = await axios.post(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/obraSocial`, {
+            const response = await axios.post(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/especialidad`, {
                 nombre
             });
             console.log('response', response.data);
             if (response.data) {
                 onClose();
                 setNombre('');
-                consumirApiObraSocial()
+                consumirApiEspecialidad()
                 // Agregar mensaje de éxito
             }
         } catch (error) {
@@ -30,7 +30,7 @@ const ModalAddObraSocial = ({consumirApiObraSocial}) => {
 
     return (
         <div>
-            <Button  size="sm" color='primary' onPress={onOpen}>Agregar Obra social</Button>
+            <Button  size="sm" color='primary' onPress={onOpen}>Agregar Especialidad</Button>
             <Modal
                 isOpen={isOpen}
                 onOpenChange={onOpenChange}
@@ -40,12 +40,12 @@ const ModalAddObraSocial = ({consumirApiObraSocial}) => {
                     {(onClose) => (
                         <>
                             <form onSubmit={handleSubmitForm}>
-                                <ModalHeader className="flex flex-col gap-1">Agregar Obra social</ModalHeader>
+                                <ModalHeader className="flex flex-col gap-1">Agregar Especialidad</ModalHeader>
                                 <ModalBody>
                                     <div>
                                         <Input
                                             type="text"
-                                            label="Nombre de obra social"
+                                            label="Nombre de especialidad"
                                             name="nombre"
                                             onChange={e => setNombre(e.target.value)}
                                             radius="sm"
@@ -75,4 +75,4 @@ const ModalAddObraSocial = ({consumirApiObraSocial}) => {
     )
 }
 
-export default ModalAddObraSocial
+export default ModalAddEspecialidad

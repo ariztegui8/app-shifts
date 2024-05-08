@@ -2,13 +2,17 @@ import { Button, Input, Modal, ModalBody, ModalContent, ModalFooter, ModalHeader
 import axios from 'axios';
 import React, { useState } from 'react'
 import { Calendar, momentLocalizer } from 'react-big-calendar';
-import moment from 'moment';
 import 'react-big-calendar/lib/css/react-big-calendar.css';
+import moment from 'moment';
+import 'moment/locale/es';
+
+moment.locale('es');
+
 
 const localizer = momentLocalizer(moment);
 
 
-const ModalAddMedico = ({ consumirApi }) => {
+const ModalAddMedico = ({ consumirApi, obrasSociales, especialidades }) => {
 
     const { isOpen, onOpen, onOpenChange, onClose } = useDisclosure();
 
@@ -20,17 +24,17 @@ const ModalAddMedico = ({ consumirApi }) => {
         pais: '',
         dni: '',
         telefono: '',
-        especialidad: '',
+        especialidad: null,
         matricula: '',
-        obraSocial: '',
+        selectedObrasSociales: [],
         availableDates: []
     })
-    const [events, setEvents] = useState([]);
+    console.log("Datos a enviar:", form);
     const [view, setView] = useState('week');
     const [date, setDate] = useState(new Date());
     const [file, setFile] = useState(null)
 
-    const { nombre, apellido, email, domicilio, pais, telefono, especialidad, dni, matricula, obraSocial } = form
+    const { nombre, apellido, email, domicilio, pais, telefono, especialidad, dni, matricula } = form
 
 
     const handleChangeForm = e => {
@@ -43,6 +47,23 @@ const ModalAddMedico = ({ consumirApi }) => {
             })
         }
     }
+
+    const handleObraSocialChange = (selectedIds) => {
+        const selectedObrasSociales = obrasSociales.filter(os => selectedIds.includes(os._id));
+        setForm(prevForm => ({
+            ...prevForm,
+            selectedObrasSociales
+        }));
+    };
+
+    const handleEspecialidadChange = (e) => {
+        const selectedId = e.target.value;
+        const selectedEspecialidad = especialidades.find(esp => esp._id === selectedId);
+        setForm(prevForm => ({
+            ...prevForm,
+            especialidad: selectedEspecialidad || null
+        }));
+    };
 
     const handleSelectSlot = ({ start, end }) => {
         const title = window.prompt('Introduce un título para el nuevo horario:');
@@ -75,8 +96,8 @@ const ModalAddMedico = ({ consumirApi }) => {
 
         const formattedDates = form.availableDates.map(event => ({
             ...event,
-            start: moment(event.start).format("YYYY-MM-DD HH:mm:ss"), // Formateando la fecha de inicio
-            end: moment(event.end).format("YYYY-MM-DD HH:mm:ss"), // Formateando la fecha de fin
+            start: moment(event.start).format("YYYY-MM-DD HH:mm:ss"),
+            end: moment(event.end).format("YYYY-MM-DD HH:mm:ss"),
             title: event.title
         }));
 
@@ -88,10 +109,10 @@ const ModalAddMedico = ({ consumirApi }) => {
         formData.append('pais', form.pais)
         formData.append('dni', form.dni)
         formData.append('telefono', form.telefono)
-        formData.append('especialidad', form.especialidad)
         formData.append('matricula', form.matricula)
-        formData.append('obraSocial', form.obraSocial)
-        formData.append('availableDates', JSON.stringify(formattedDates));
+        formData.append('especialidad', JSON.stringify(form.especialidad))
+        formData.append('selectedObrasSociales', JSON.stringify(form.selectedObrasSociales));
+        formData.append('availableDates', JSON.stringify(formattedDates))
 
         if (file) {
             formData.append('image', file)
@@ -117,24 +138,16 @@ const ModalAddMedico = ({ consumirApi }) => {
                 pais: '',
                 dni: '',
                 telefono: '',
-                especialidad: '',
+                especialidad: null,
                 matricula: '',
-                obraSocial: '',
-                availableDates: []
+                availableDates: [],
+                selectedObrasSociales: [],
             })
             setFile(null)
         } catch (error) {
             console.error('Error', error.response ? error.response.data : error.message)
         }
     }
-
-    const oSocial = [
-        { value: "avalian", label: "avalian" },
-        { value: "sancor", label: "sancor" },
-        { value: "segu", label: "segu" },
-        { value: "galiia", label: "galiia" },
-        { value: "pere", label: "pere" },
-    ]
 
 
     return (
@@ -144,7 +157,7 @@ const ModalAddMedico = ({ consumirApi }) => {
                 isOpen={isOpen}
                 onOpenChange={onOpenChange}
                 backdrop='blur'
-                size='2xl'
+                size='5xl'
                 scrollBehavior='outside'
             >
                 <ModalContent>
@@ -226,17 +239,23 @@ const ModalAddMedico = ({ consumirApi }) => {
                                             size="sm"
                                             variant="bordered"
                                         />
-                                        <Input
-                                            type="text"
-                                            label="Especialidad"
-                                            name="especialidad"
-                                            value={especialidad}
-                                            onChange={handleChangeForm}
-                                            radius="sm"
-                                            size="sm"
-                                            variant="bordered"
-                                            isRequired
-                                        />
+                                        <div>
+                                            <Select
+                                                label="Seleccionar Especialidad"
+                                                onChange={handleEspecialidadChange}
+                                                value={form.especialidad ? form.especialidad._id : ''}
+                                                name='especialidad'
+                                                radius="sm"
+                                                size="sm"
+                                                variant="bordered"
+                                            >
+                                                {especialidades.map(esp => (
+                                                    <SelectItem key={esp._id} value={esp._id}>
+                                                        {esp.nombre}
+                                                    </SelectItem>
+                                                ))}
+                                            </Select>
+                                        </div>
                                         <Input
                                             type="text"
                                             label="Matricula"
@@ -261,18 +280,23 @@ const ModalAddMedico = ({ consumirApi }) => {
 
                                     </div>
                                     <div className='grid grid-cols-1 gap-4'>
-                                        <Select
-                                            label="Seleccionar Obra Social"
-                                            radius="sm"
-                                            size="sm"
-                                            variant="bordered"
-                                        >
-                                            {oSocial.map((seg) => (
-                                                <SelectItem key={seg.value} value={seg.value}>
-                                                    {seg.label}
-                                                </SelectItem>
-                                            ))}
-                                        </Select>
+                                        <div>
+                                            <Select
+                                                label="Seleccionar Obra Social"
+                                                selectionMode="multiple"
+                                                onChange={(e) => handleObraSocialChange(e.target.value)}
+                                                value={form.selectedObrasSociales.map(os => os._id)}
+                                                radius="sm"
+                                                size="sm"
+                                                variant="bordered"
+                                            >
+                                                {obrasSociales.map(os => (
+                                                    <SelectItem key={os._id} value={os._id}>
+                                                        {os.nombre}
+                                                    </SelectItem>
+                                                ))}
+                                            </Select>
+                                        </div>
 
                                         <div>
                                             <Calendar
@@ -292,6 +316,20 @@ const ModalAddMedico = ({ consumirApi }) => {
                                                 style={{ height: 500 }}
                                                 min={minTime}
                                                 max={maxTime}
+                                                messages={{
+                                                    next: "Siguiente",
+                                                    previous: "Anterior",
+                                                    today: "Hoy",
+                                                    month: "Mes",
+                                                    week: "Semana",
+                                                    day: "Día",
+                                                    agenda: "Agenda",
+                                                    date: "Fecha",
+                                                    time: "Hora",
+                                                    event: "Evento",
+                                                    noEventsInRange: "No hay eventos en este rango.",
+                                                    showMore: total => `+ Ver más (${total})`
+                                                }}
                                             />
                                         </div>
                                     </div>
@@ -302,9 +340,7 @@ const ModalAddMedico = ({ consumirApi }) => {
                                     </Button>
                                     <Button
                                         type='submit'
-                                        // htmlType='submit'
                                         color="primary"
-                                    // onPress={handleSubmitForm}
                                     >
                                         Agregar
                                     </Button>

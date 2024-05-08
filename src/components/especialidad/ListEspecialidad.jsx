@@ -1,22 +1,22 @@
 'use client'
 import React, { useEffect, useRef, useState } from 'react'
 
-const ListObrasSociales = ({obrasSociales}) => {
+const ListEspecialidad = ({especialidades}) => {
 
 
     return (
         <div>
-            {obrasSociales.length > 0 ?
-                obrasSociales.map(os => (
+            {especialidades.length > 0 ?
+                especialidades.map(os => (
                    <div key={os._id}>
                     <p>{os.nombre}</p>
                    </div>
                 ))
                 :
-                <p className="col-span-full text-center">No hay artículos disponibles.</p>
+                <p className="col-span-full text-center">No hay especialidad disponible.</p>
             }
         </div>
     )
 }
 
-export default ListObrasSociales
+export default ListEspecialidad
